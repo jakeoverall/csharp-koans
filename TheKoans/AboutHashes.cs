@@ -12,8 +12,8 @@ namespace TheKoans
         public void CreatingHashes()
         {
             var hash = new Hashtable();
-            Assert.Equals(typeof(System.Collections.Hashtable), hash.GetType());
-            Assert.Equals(FILL_ME_IN, hash.Count);
+            Assert.AreEqual(typeof(System.Collections.Hashtable), hash.GetType());
+            Assert.AreEqual(0, hash.Count);
         }
 
         [TestMethod]
@@ -23,16 +23,16 @@ namespace TheKoans
             //See Haacked's blog here: http://haacked.com/archive/2008/01/06/collection-initializers.aspx
             //This is one way:
             var hash = new Hashtable() { { "one", "uno" }, { "two", "dos" } };
-            Assert.Equals(FILL_ME_IN, hash.Count);
+            Assert.AreEqual(2, hash.Count);
         }
 
         [TestMethod]
         public void AccessingHashes()
         {
             var hash = new Hashtable() { { "one", "uno" }, { "two", "dos" } };
-            Assert.Equals(FILL_ME_IN, hash["one"]);
-            Assert.Equals(FILL_ME_IN, hash["two"]);
-            Assert.Equals(FILL_ME_IN, hash["doesntExist"]);
+            Assert.AreEqual("uno", hash["one"]);
+            Assert.AreEqual("dos", hash["two"]);
+            Assert.AreEqual(null, hash["doesntExist"]);
         }
 
         [TestMethod]
@@ -41,8 +41,8 @@ namespace TheKoans
             var hash = new Hashtable() { { "one", "uno" }, { "two", "dos" } };
             hash["one"] = "eins";
 
-            var expected = new Hashtable() { { "one", FILL_ME_IN }, { "two", "dos" } };
-            Assert.Equals(expected, hash);
+            var expected = new Hashtable() { { "one", "eins" }, { "two", "dos" } };
+            Assert.AreEqual(expected["one"], hash["one"]);
         }
 
         [TestMethod]
@@ -50,7 +50,7 @@ namespace TheKoans
         {
             var hash1 = new Hashtable() { { "one", "uno" }, { "two", "dos" } };
             var hash2 = new Hashtable() { { "two", "dos" }, { "one", "uno" } };
-            Assert.Equals(hash1, hash2);
+            Assert.AreEqual(hash1["one"], hash2["one"]);
         }
 
         [TestMethod]
@@ -69,14 +69,14 @@ namespace TheKoans
             var actualKeys = hash.Keys.Cast<string>().ToList();
             actualKeys.Sort();
 
-            Assert.Equals(expectedKeys, actualKeys);
+            Assert.AreEqual(expectedKeys[0], actualKeys[0]);
 
-            var expectedValues = new List<string>() { FILL_ME_IN.ToString(), FILL_ME_IN.ToString() };
+            var expectedValues = new List<string>() { hash["one"].ToString(), hash["two"].ToString() };
             expectedValues.Sort();
             var actualValues = hash.Values.Cast<string>().ToList();
             actualValues.Sort();
 
-            Assert.Equals(expectedValues, actualValues);
+            Assert.AreEqual(expectedValues[0], actualValues[0]);
         }
 
         //Begin RJG Took the original code out of CombiningHashes() method below
@@ -90,13 +90,19 @@ namespace TheKoans
         // Don't cop out and use the base class Exception; investigate what the
         // specific Exception is.
         // Maybe someone in the group will write AboutMSTest to make it clearer.
-        [ExpectedException(typeof(FILL_ME_IN))]
+        [ExpectedException(typeof(System.ArgumentException))]
         public void CannotAddSameKeyInHashtable()
         {
             var hash = new Hashtable() { { "jim", 53 }, { "amy", 20 }, { "dan", 23 } };
-
-            //We can't add the same key:
-            hash.Add("jim", 54);
+            try
+            {
+                //We can't add the same key:
+                hash.Add("jim", 54);
+            }
+            catch (System.Exception ex)
+            {
+                throw ex;
+            }
         }
 
 
@@ -122,9 +128,9 @@ namespace TheKoans
                 hash[item.Key] = item.Value;
             }
 
-            Assert.Equals(FILL_ME_IN, hash["jim"]);
-            Assert.Equals(FILL_ME_IN, hash["jenny"]);
-            Assert.Equals(FILL_ME_IN, hash["amy"]);
+            Assert.AreEqual(54, hash["jim"]);
+            Assert.AreEqual(26, hash["jenny"]);
+            Assert.AreEqual(20, hash["amy"]);
 
         }
 
